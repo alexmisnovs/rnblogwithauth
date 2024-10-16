@@ -25,7 +25,7 @@ function SignupScreen() {
 
       authCtx.authenticate(data.jwt, data.user);
       // redirect
-      push("/(user)/profile");
+      push("/");
     } catch (error) {
       console.log(error);
       Alert.alert("Authentication failed", "Could not create user, please check your input and try again later.");

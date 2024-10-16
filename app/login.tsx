@@ -25,7 +25,8 @@ function LoginScreen() {
       const data = await signIn(email, password);
       const token = data.jwt;
       authCtx.authenticate(token, data.user);
-      push("/(user)/profile");
+      // push("/(user)/profile");
+      push("/");
     } catch (error) {
       console.log(error);
       Alert.alert("Authentication failed!", "Could not log you in. Please check your credentials or try again later!");

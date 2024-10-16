@@ -1,4 +1,9 @@
-import { createContext, useState, PropsWithChildren } from "react";
+import { createContext, useState, PropsWithChildren, useEffect } from "react";
+import * as SecureStore from "expo-secure-store";
+
+async function save(key: string, value: string) {
+  await SecureStore.setItemAsync(key, value);
+}
 
 type StrapiUser = {
   id: number;
@@ -15,6 +20,7 @@ type StrapiUser = {
 };
 type AuthData = {
   token: string | null;
+  isLoading: boolean;
   user: StrapiUser | null;
   isAuthenticated: boolean;
   authenticate: (token: string, user: StrapiUser) => void;
@@ -24,7 +30,8 @@ type AuthData = {
 export const AuthContext = createContext<AuthData>({
   token: "",
   user: null,
-  isAuthenticated: false,
+  isLoading: true,
+  isAuthenticated: true,
   authenticate: (token: string, user: StrapiUser) => {},
   logout: () => {}
 });
@@ -32,19 +39,45 @@ export const AuthContext = createContext<AuthData>({
 function AuthContextProvider({ children }: PropsWithChildren) {
   const [authToken, setAuthToken] = useState<string | null>("");
   const [user, setUser] = useState<StrapiUser | null>(null);
-  function authenticate(token: string, user: StrapiUser) {
+  const [isLoading, setIsLoading] = useState(true);
+  async function authenticate(token: string, user: StrapiUser) {
     setAuthToken(token);
     setUser(user);
+
+    await save("token", token);
+    await save("user", JSON.stringify(user));
   }
 
-  function logout() {
+  async function logout() {
     setAuthToken(null);
     setUser(null);
+
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("user");
   }
+
+  useEffect(() => {
+    //check if user already exists in local storage
+    const getToken = async () => {
+      const token = await SecureStore.getItemAsync("token");
+      const user = await SecureStore.getItemAsync("user");
+
+      if (token && user) {
+        console.log("From Auth UseEffect - got user", JSON.parse(user).username);
+        setAuthToken(token);
+        setUser(JSON.parse(user));
+      }
+      setIsLoading(false);
+    };
+
+    getToken();
+    console.log(authToken);
+  }, []);
 
   const value = {
     token: authToken,
     user: user,
+    isLoading: isLoading,
     isAuthenticated: !!authToken,
     authenticate: authenticate,
     logout: logout
