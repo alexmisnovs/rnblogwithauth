@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
-import { useRouter } from "expo-router";
+import { Alert, StyleSheet, View, Text } from "react-native";
 
 import FlatButton from "../ui/FlatButton";
 import AuthForm from "./AuthForm";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/styles";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { useNavigation } from "expo-router";
 
 type AuthContentProps = {
   isLogin: boolean;
@@ -21,7 +22,7 @@ type credentialsType = {
 };
 
 function AuthContent({ isLogin, onAuthenticate }: AuthContentProps) {
-  const router = useRouter();
+  const { push } = useNavigation<NativeStackNavigationProp<any>>();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -33,9 +34,10 @@ function AuthContent({ isLogin, onAuthenticate }: AuthContentProps) {
 
   function switchAuthModeHandler() {
     if (isLogin) {
-      router.replace("/(auth)/login");
+      push("signup");
     } else {
-      router.replace("/(auth)/signup");
+      console.log("Is login: ", isLogin);
+      push("login");
     }
   }
 

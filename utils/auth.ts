@@ -2,16 +2,13 @@ import axios from "axios";
 const strapiUrl = process.env.EXPO_PUBLIC_API_URL as string;
 
 export async function signIn(identifier: string, password: string) {
-  console.log(strapiUrl);
-  console.log(identifier, password);
-
   const data = {
     identifier: identifier,
     password: password
   };
 
   const response = await axios.post(`${strapiUrl}/auth/local`, data);
-  console.log(response.data);
+
   return response.data;
 }
 
@@ -21,13 +18,28 @@ export async function signUp(username: string, email: string, password: string) 
     email: email,
     password: password
   };
-  console.log(strapiUrl);
-  console.log(data);
+
   const response = await axios.post(`${strapiUrl}/auth/local/register`, data);
-  console.log(response.data);
+
   return response.data;
 }
 
 export async function signOut(strapiUrl: string) {
   const response = await axios.post(`${strapiUrl}/auth/local/logout`);
+}
+
+export async function getUserDetails(token: string) {
+  const config = {};
+
+  try {
+    const response = await axios.get(`${strapiUrl}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("Respons from helper", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("Error from helper", error);
+  }
 }

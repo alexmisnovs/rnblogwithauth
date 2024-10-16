@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/styles";
 
 type buttonType = {
   children: React.ReactNode;
