@@ -1,11 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
 import AuthContextProvider from "@/providers/AuthProvider";
+import TanQueryProvider from "@/providers/TanStackQueryProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -14,7 +15,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(app)"
+  initialRouteName: "(blog)"
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -47,7 +48,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <AuthContextProvider>
-      <Slot />
+      <TanQueryProvider>
+        <Stack />
+      </TanQueryProvider>
     </AuthContextProvider>
   );
 }

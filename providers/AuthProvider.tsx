@@ -1,4 +1,4 @@
-import { createContext, useState, PropsWithChildren, useEffect } from "react";
+import { createContext, useState, PropsWithChildren, useEffect, useContext } from "react";
 import * as SecureStore from "expo-secure-store";
 
 async function save(key: string, value: string) {
@@ -85,5 +85,7 @@ function AuthContextProvider({ children }: PropsWithChildren) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthContextProvider;

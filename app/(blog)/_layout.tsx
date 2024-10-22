@@ -13,7 +13,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tab One",
+          title: "Articles",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
       />
@@ -25,13 +25,6 @@ export default function TabLayout() {
         }}
       />
       ø
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user-circle" color={color} />
-        }}
-      />
     </Tabs>
   );
 }
